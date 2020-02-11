@@ -36,4 +36,12 @@ try {
    }
 });
 
-module.exports = mongoose.models('User', userSchema);
+userSchema.methods.comparePassword = async function(attempt, next){
+    try{ 
+     return await bcrypt.compare(attempt, this.password)   
+    }catch(err){
+        return next(err);
+    }
+}
+
+module.exports = mongoose.model('User', userSchema);
