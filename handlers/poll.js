@@ -27,9 +27,9 @@ exports.createPoll = async (req, res, next)=>{
           votes: 0}))
         
           });
-        /* user.polls.push(poll._id);
-         await user.save();*/
-          res.status(201).json({...poll._doc});
+         user.polls.push(poll._id);
+         await user.save();
+          res.status(201).json({...poll._doc, user: user._id});
     } catch (err){
         err.status = 400;
         next(err);
