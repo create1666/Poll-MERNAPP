@@ -1,4 +1,7 @@
-module.exports ={...require('./auth')} ;
+module.exports ={
+    ...require('./auth'),
+    ...require('./poll')
+} ;
 
 
 module.exports.notFound = (req, res, next)=>{

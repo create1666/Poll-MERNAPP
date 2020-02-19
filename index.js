@@ -15,8 +15,9 @@ app.use(cors());
 app.use(json());
 app.use(urlencoded({extended:true}));
 
-app.get("/", (req, res)=>res.json({hello: "world"}));
+//app.get("/", (req, res)=>res.json({hello: "world"}));
 app.use('/api/auth', routes.auth);
+app.use('/api/polls', routes.poll);
 
 app.use(handle.notFound);
 app.use(handle.errors);

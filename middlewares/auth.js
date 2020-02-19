@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const db =  require('../models');
 
 module.exports = (req, res, next)=>{
     if(req.headers.authorization){
