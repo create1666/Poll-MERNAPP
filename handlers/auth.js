@@ -6,13 +6,13 @@ const db =  require('../models');
 
 
 exports.register = async (req, res, next)=>{
-   
+  
     try{
    const user = await db.User.create(req.body);
      const{ id, username} = user;
      
      const token = jwt.sign({id, username}, process.env.SECRET)
-        
+     console.log(token);
       res.status(201).json({
            id,
          username,
