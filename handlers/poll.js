@@ -70,3 +70,68 @@ exports.getPoll = async (req, res, next) => {
     err.status = 400;
     }
 };
+
+exports.deletePoll = async (req, res, next) => {
+    try{
+        const{id: pollId} = req.params;
+        const{id: userId} = req.decoded;
+        
+        const poll = await db.Poll.findById(id);
+        if(!poll) throw new Error('No poll Found');
+        if(poll.user.toString !== userId) {
+        throw new Error('Unauthorized access');
+
+    }
+
+    await poll.remove();
+    res.status(202).json(poll);
+    }catch(err){
+        err.status = 400;
+        next(err);
+    }
+};
+
+exports.vote = async (req, res, next) => {
+    try{
+      const {id: pollId} = req.params;
+      const {id: userId} =  req.decoded;
+      const {answer} = req.body;
+
+      if(answer){
+          const poll = await db.Poll.findById(pollId);
+          if(!poll) throw new Error('No poll Found');
+
+          const vote =  poll.options.map(option =>
+            {
+                if(option.option ===  answer){
+                    return{
+                        option: option.option,
+                        _id: option._id,
+                        votes: option.option.votes + 1
+                    };
+                } else {
+                    return option;
+                }
+            });
+             
+             if(poll.voted.filter(user => 
+                user.toString() === userId).length <= 0){
+                    poll.voted.push(userId);
+                    poll.options = vote;
+                    await poll.save();
+
+
+                    res.status(202).json(poll);
+                } else {
+                    throw new Error('Already voted');
+                }
+      } else {
+          throw new Error('No answer provided');
+      }
+
+    }catch(err){
+
+        err.status = 400;
+        next(err);
+    }
+};

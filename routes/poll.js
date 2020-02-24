@@ -13,7 +13,7 @@ router.get('/user', auth, handle.usersPolls);
 router
 .route('/:id')
 .get(handle.getPoll)
-.post()
-.delete();
+.post(auth, handle.vote)
+.delete(auth, handle.deletePoll);
 
 module.exports = router;
